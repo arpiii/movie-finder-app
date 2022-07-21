@@ -21,7 +21,7 @@ MongoClient.connect(dbConnectionStr)
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(cors)
+app.use(cors())
 
 app.get("/search", async (request, response) => {
     try {
@@ -40,7 +40,6 @@ app.get("/search", async (request, response) => {
             }
         ]).toArray()
         response.send(result)
-        console.log(result)
     } catch(error) {
         response.status(500).send({message: error.message})
     }
