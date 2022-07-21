@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const {MongoClient, ObjectId} = require('mongodb')
+const { response } = require('express')
+const { request } = require('http')
 require('dotenv').config()
 const PORT = 8000
 
@@ -25,7 +27,7 @@ app.get("/search", async (request, response) => {
     try {
         let result = await collection.aggregate([
             {
-                "$Search" : {
+                "$search" : {
                     "autocomplete" : {
                         "query": `${request.query.query}`,
                         "path": "title",
@@ -38,6 +40,7 @@ app.get("/search", async (request, response) => {
             }
         ]).toArray()
         response.send(result)
+        console.log(result)
     } catch(error) {
         response.status(500).send({message: error.message})
     }
@@ -49,7 +52,7 @@ app.get("/get/:id", async(request, response) => {
             "_id": ObjectId(request.params.id)
         })
         response.send(result)
-    } catch {
+    } catch (error){
         response.status(500).send({message: error.message})
     }
 })
